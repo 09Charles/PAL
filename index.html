@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Equipe RPG - Palmeiras</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700&family=Almendra:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --parchment: #f4e4bc;
+            --ink: #2c1e16;
+            --gold: #b8860b;
+            --emerald: #064e3b;
+            --crimson: #8b0000;
+        }
+
+        body {
+            background-color: #121212;
+            color: var(--ink);
+            font-family: 'Almendra', serif;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-leather.png');
+            padding: 20px;
+        }
+
+        .parchment-bg {
+            background-color: var(--parchment);
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 100px rgba(139, 69, 19, 0.2);
+            border: 15px solid transparent;
+            border-image: url('https://www.transparenttextures.com/patterns/aged-paper.png') 30 round;
+            position: relative;
+        }
+
+        h1, h2, h3 {
+            font-family: 'MedievalSharp', cursive;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.05);
+            border-bottom: 2px solid var(--ink);
+            padding: 5px 10px;
+        }
+
+        .progress-bar-container {
+            background: #d2b48c;
+            height: 20px;
+            border: 2px solid var(--ink);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--emerald), #10b981);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .tower-icon {
+            font-size: 2rem;
+            color: #444;
+        }
+
+        .seal {
+            width: 80px;
+            height: 80px;
+            background: var(--emerald);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fbbf24;
+            font-weight: bold;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            border: 4px double #fbbf24;
+            margin: auto;
+        }
+
+        .table-medieval {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 5px;
+        }
+
+        .table-medieval th {
+            text-align: left;
+            border-bottom: 2px solid var(--ink);
+            padding: 5px;
+        }
+
+        .table-medieval td {
+            background: rgba(0,0,0,0.03);
+            padding: 8px;
+        }
+
+        .result-vit { color: #065f46; font-weight: bold; }
+        .result-der { color: #991b1b; font-weight: bold; }
+        .result-emp { color: #374151; font-weight: bold; }
+
+        .meta-text {
+            color: rgba(44, 30, 22, 0.6);
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-start min-h-screen">
+
+    <div class="max-w-4xl w-full parchment-bg p-8 md:p-12 rounded-sm mb-10">
+        
+        <!-- CABEÇALHO -->
+        <header class="text-center mb-8 border-b-2 border-double border-gray-800 pb-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-left w-full md:w-2/3">
+                    <h1 class="text-5xl mb-2" id="team-name">PALMEIRAS <span class="text-3xl opacity-75">(PAL)</span></h1>
+                    <p class="italic text-lg text-gray-700" id="team-description">
+                        Um clã de iniciantes destemidos...
+                    </p>
+                </div>
+                <div class="w-full md:w-1/3">
+                    <div class="seal" id="power-level-label">NV 2</div>
+                    <p class="text-sm mt-1 uppercase font-bold">Nível de Poder</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- ATRIBUTOS PRINCIPAIS -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="stat-box text-center">
+                <span class="block text-xs uppercase font-bold">Influência</span>
+                <span class="text-2xl font-bold" id="influence-pts">31</span>
+            </div>
+            <div class="stat-box text-center">
+                <span class="block text-xs uppercase font-bold">Tesouro</span>
+                <span class="text-2xl font-bold" id="money-accumulated">R$ 190,00</span>
+            </div>
+            <div class="stat-box text-center">
+                <span class="block text-xs uppercase font-bold">Experiência</span>
+                <span class="text-2xl font-bold" id="xp-total">180 XP</span>
+            </div>
+            <div class="stat-box text-center">
+                <span class="block text-xs uppercase font-bold">Vitórias</span>
+                <span class="text-2xl font-bold" id="total-wins">2</span>
+            </div>
+        </div>
+
+        <!-- SENDA DA EVOLUÇÃO -->
+        <section class="mb-10">
+            <h2 class="text-2xl mb-4 flex items-center gap-2">
+                <span>⚔️</span> Senda da Evolução
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <div class="flex justify-between text-sm uppercase font-bold mb-1">
+                        <span>Progresso do Nível</span>
+                        <span id="xp-needed-text">Faltam 20 XP</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="xp-progress-bar" style="width: 90%;"></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-3 border border-gray-400 rounded text-center">
+                        <span class="block text-xs uppercase">Campanha</span>
+                        <span class="text-xl font-bold" id="campaign-progress">29%</span>
+                    </div>
+                    <div class="p-3 border border-gray-400 rounded text-center">
+                        <span class="block text-xs uppercase">Partidas Perfeitas</span>
+                        <span class="text-xl font-bold" id="perfect-matches">0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid md:grid-cols-2 gap-10">
+            <!-- FORTIFICAÇÕES -->
+            <section>
+                <h2 class="text-2xl mb-4 border-b border-gray-400 pb-2">🏰 Fortificações</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center p-2 border border-dashed border-gray-500">
+                        <div class="tower-icon">♜</div>
+                        <span class="block text-xs">Torre I</span>
+                        <span class="text-xl font-bold" id="t1-val">28</span>
+                    </div>
+                    <div class="text-center p-2 border border-dashed border-gray-500">
+                        <div class="tower-icon">♜</div>
+                        <span class="block text-xs">Torre II</span>
+                        <span class="text-xl font-bold" id="t2-val">28</span>
+                    </div>
+                    <div class="text-center p-2 border border-dashed border-gray-500">
+                        <div class="tower-icon">♜</div>
+                        <span class="block text-xs">Torre III</span>
+                        <span class="text-xl font-bold" id="t3-val">30</span>
+                    </div>
+                    <div class="text-center p-2 border border-dashed border-gray-500">
+                        <div class="tower-icon">♜</div>
+                        <span class="block text-xs">Torre IV</span>
+                        <span class="text-xl font-bold" id="t4-val">27</span>
+                    </div>
+                </div>
+                <div class="mt-4 text-center bg-emerald-900 text-white p-2 rounded">
+                    Total de Guarnições: <span id="total-garrisons">113</span> / 120
+                </div>
+            </section>
+
+            <!-- CONQUISTAS (REGIÕES) -->
+            <section>
+                <h2 class="text-2xl mb-4 border-b border-gray-400 pb-2">🗺️ Conquistas</h2>
+                <ul class="space-y-3">
+                    <li class="flex justify-between items-center">
+                        <span>Norte (N)</span>
+                        <span class="font-bold">
+                            <span id="dom-n">0</span><span class="meta-text">/5</span>
+                        </span>
+                    </li>
+                    <li class="flex justify-between items-center">
+                        <span>Nordeste (NE)</span>
+                        <span class="font-bold">
+                            <span id="dom-ne">2</span><span class="meta-text">/10</span>
+                        </span>
+                    </li>
+                    <li class="flex justify-between items-center">
+                        <span>Centro-Oeste (CO)</span>
+                        <span class="font-bold">
+                            <span id="dom-co">0</span><span class="meta-text">/5</span>
+                        </span>
+                    </li>
+                    <li class="flex justify-between items-center">
+                        <span>Sudeste (SE)</span>
+                        <span class="font-bold">
+                            <span id="dom-se">8</span><span class="meta-text">/120</span>
+                        </span>
+                    </li>
+                    <li class="flex justify-between items-center">
+                        <span>Sul (S)</span>
+                        <span class="font-bold">
+                            <span id="dom-s">4</span><span class="meta-text">/25</span>
+                        </span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- CRÔNICAS RECENTES -->
+        <section class="mt-10">
+            <h2 class="text-2xl mb-4 border-b-2 border-gray-800 pb-2">📜 Crônicas Recentes</h2>
+            <div class="overflow-x-auto">
+                <table class="table-medieval">
+                    <thead>
+                        <tr>
+                            <th>Jogo</th>
+                            <th>Local</th>
+                            <th>Oponente</th>
+                            <th>Placar</th>
+                            <th>Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="chronicles-body">
+                        <!-- Gerado via Script -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="mt-12 text-center text-sm border-t border-gray-400 pt-4 italic">
+            "Surgindo como o sol, o Alviverde Imponente brilha na batalha."
+        </footer>
+    </div>
+
+    <script>
+        // Dados Corrigidos com base nas células I, J, T, U e AC do CSV PAL
+        const teamData = {
+            c1: "PALMEIRAS",
+            d1: "PAL",
+            a1: "31",
+            a2: "R$ 190,00",
+            d2: "2",
+            g1: "180",
+            e2: "Iniciante",
+            f2: "Destemido",
+            f1: "29%",
+            bp1: "90", 
+            bo1: "20 XP",
+            e7: "2",
+            f10: "0",
+            c21: "28", c22: "28", c23: "30", c24: "27", c25: "113",
+            conquistas: {
+                n: { val: "0", meta: "5" },
+                ne: { val: "2", meta: "10" },
+                co: { val: "0", meta: "5" },
+                se: { val: "8", meta: "120" },
+                s: { val: "4", meta: "25" }
+            },
+            cronicas: [
+                { jogo: "3", local: "FORA", adv: "CAM", placar: "2 x 2", res: "EMP" }, // T3=2, U3=2, AC3=EMP
+                { jogo: "17", local: "CASA", adv: "VIT", placar: "5 x 1", res: "VIT" }, // T4=5, U4=1, AC4=VIT
+                { jogo: "30", local: "FORA", adv: "INT", placar: "3 x 1", res: "VIT" }  // T5=3, U5=1, AC5=VIT
+            ]
+        };
+
+        function updateUI(data) {
+            document.getElementById('team-name').innerHTML = `${data.c1} <span class="text-3xl opacity-75">(${data.d1})</span>`;
+            
+            let categoria = "Iniciantes";
+            const nivel = parseInt(data.d2);
+            if (nivel > 4 && nivel <= 7) categoria = "Profissionais";
+            else if (nivel > 7 && nivel <= 9) categoria = "Elites";
+            else if (nivel > 9) categoria = "Lendas";
+
+            const ancestralidade = data.f2;
+            const descricoes = {
+                "Destemido": "reconhecidos pela bravura impetuosa, avançando sobre os domínios inimigos com força esmeralda.",
+                "Equilibrado": "guardiões da estratégia, mantendo as linhas defensivas tão firmes quanto as raízes de um carvalho.",
+                "Audacioso": "mestres do improviso, capazes de virar batalhas perdidas com movimentos de pura ousadia.",
+                "Idealista": "portadores de uma honra antiga, cujos feitos ecoam pelas crônicas da Senda."
+            };
+
+            document.getElementById('team-description').innerText = `Um clã de ${categoria.toLowerCase()} ${ancestralidade.toLowerCase()}s, ${descricoes[ancestralidade] || "em busca de glória eterna."}`;
+            
+            document.getElementById('power-level-label').innerText = `NV ${data.d2}`;
+            document.getElementById('influence-pts').innerText = data.a1;
+            document.getElementById('money-accumulated').innerText = data.a2;
+            document.getElementById('xp-total').innerText = `${data.g1} XP`;
+            document.getElementById('total-wins').innerText = data.e7;
+            document.getElementById('campaign-progress').innerText = data.f1;
+            document.getElementById('perfect-matches').innerText = data.f10;
+            document.getElementById('xp-needed-text').innerText = `Faltam ${data.bo1}`;
+            document.getElementById('xp-progress-bar').style.width = `${data.bp1}%`;
+
+            document.getElementById('t1-val').innerText = data.c21;
+            document.getElementById('t2-val').innerText = data.c22;
+            document.getElementById('t3-val').innerText = data.c23;
+            document.getElementById('t4-val').innerText = data.c24;
+            document.getElementById('total-garrisons').innerText = data.c25;
+
+            document.getElementById('dom-n').innerText = data.conquistas.n.val;
+            document.getElementById('dom-ne').innerText = data.conquistas.ne.val;
+            document.getElementById('dom-co').innerText = data.conquistas.co.val;
+            document.getElementById('dom-se').innerText = data.conquistas.se.val;
+            document.getElementById('dom-s').innerText = data.conquistas.s.val;
+
+            const tableBody = document.getElementById('chronicles-body');
+            tableBody.innerHTML = '';
+            
+            data.cronicas.forEach(log => {
+                const row = document.createElement('tr');
+                let resClass = log.res === 'VIT' ? 'result-vit' : (log.res === 'DER' ? 'result-der' : 'result-emp');
+                row.innerHTML = `
+                    <td>${log.jogo}</td>
+                    <td>${log.local}</td>
+                    <td>${log.adv}</td>
+                    <td>${log.placar}</td>
+                    <td class="${resClass}">${log.res}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        window.onload = () => {
+            updateUI(teamData);
+        };
+    </script>
+</body>
+</html>
